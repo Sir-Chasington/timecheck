@@ -1,0 +1,29 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.chart-container {
+    max-width: 1500px;
+    margin: 0 auto; /* Center the chart */
+    padding: 20px; /* Add some padding */
+}
+
+canvas {
+    width: 100% !important; /* Make the canvas take the full width of the container */
+    height: auto !important; /* Maintain aspect ratio */
+}
+
+.custom-legend .legend-item.hidden {
+    opacity: 0.5;
+    text-decoration: line-through;
+}

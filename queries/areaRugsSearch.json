@@ -1,0 +1,66 @@
+{
+    "client": {
+        "id": "ostk",
+        "version": "1.0.0",
+        "deviceType": "DESKTOP"
+    },
+    "user": {
+        "seed": "3622946904276041631",
+        "language": "en",
+        "country": "US",
+        "currency": "USD",
+        "zip": "",
+        "zipByIp": "",
+        "requestId": ""
+    },
+    "query": {
+        "productSearchQuery": {
+            "taxonomies": [],
+            "attributes": {},
+            "restrictions": {},
+            "ranges": {},
+            "searchParameters": {
+                "fastshipping": null,
+                "oos": null,
+                "page": 1,
+                "sort": "bestselling",
+                "rating": null,
+                "keywords": "area rugs"
+            }
+        },
+        "origin": {
+            "scheme": "https",
+            "hostType": "DomainName",
+            "host": "www.overstock.com"
+        }
+    },
+    "requires": [
+        "banners",
+        "facets",
+        "meta",
+        "products",
+        "redirect",
+        "relatedSearches",
+        "selectedFacets",
+        "seoMetadata",
+        "sponsoredProducts",
+        "sponsoredShowcase",
+        "sortOptions",
+        "taxonomyFacets",
+        "notating",
+        "featuredProduct"
+    ],
+    "conversationalSearch": {},
+    "clientProfileOverrides": {
+        "productCount": {
+            "rows": 60,
+            "maxSponsoredProducts": 0
+        },
+        "sponsoredShowcaseProductCount": {
+            "rows": 0,
+            "maxSponsoredProducts": 0
+        }
+    },
+    "verboseLogging": false,
+    "url": "https://www.overstock.com/collections/area-rugs"
+}
