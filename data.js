@@ -44,20 +44,35 @@ export async function fetchData() {
     }
 }
 
-// Function to parse the date in the format "4:54_pm_8_7_2024" and return only the date part
+// Function to parse the date and time in the format "8:31_am_13_8_2024" and return a Date object
 export function parseDate(dateStr) {
     const [time, ampm, day, month, year] = dateStr.split('_');
-    return new Date(year, month - 1, day);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Adjust for PM if necessary
+    let adjustedHours = hours;
+    if (ampm.toLowerCase() === 'pm' && hours < 12) {
+        adjustedHours += 12;
+    } else if (ampm.toLowerCase() === 'am' && hours === 12) {
+        adjustedHours = 0; // Handle midnight
+    }
+
+    const date = new Date(year, month - 1, day);
+    date.setHours(adjustedHours);
+    date.setMinutes(minutes);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    
+    return date;
 }
 
-// Function to generate the date range for the past month
-export function generateDateRange() {
-    const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - 1);
-    startDate.setHours(0, 0, 0, 0);
-
+// Function to generate the date range for the past `days` days
+export function generateDateRange(days = 30) {
     const endDate = new Date();
     endDate.setHours(0, 0, 0, 0);
+    
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - days);
 
     const dateArray = [];
     let currentDate = new Date(startDate);
@@ -69,6 +84,7 @@ export function generateDateRange() {
 
     return dateArray;
 }
+
 
 // Function to convert camelCase to "Title Case"
 export function camelCaseToTitleCase(camelCaseStr) {
@@ -88,51 +104,31 @@ export function processData(data) {
             average: item.average,
             high: item.high,
             low: item.low,
-            errors: item.errors, // Include the errors array
-            hasData: true, // Mark as true since this entry has data
-            name: titleCaseName // Add the title-cased name
+            errors: item.errors,
+            hasData: true,
+            name: titleCaseName
         });
+
         return acc;
     }, {});
 
-    // Sort each group by date
+    // Sort each group by date and time
     for (const key in groupedData) {
         groupedData[key].sort((a, b) => a.date - b.date);
     }
 
-    // Ensure each date in the range has a data point
-    const dateRange = generateDateRange();
+    // Limit the data to the last 30 days while keeping multiple points per day
+    const last30Days = generateDateRange(30);
     for (const key in groupedData) {
-        const titleCaseName = camelCaseToTitleCase(key);
-
-        const filledData = dateRange.map(date => {
-            const existing = groupedData[key].find(d => {
-                return d.date.getFullYear() === date.getFullYear() && 
-                       d.date.getMonth() === date.getMonth() && 
-                       d.date.getDate() === date.getDate();
-            });
-            return existing 
-                ? { 
-                    date: date, 
-                    average: existing.average, 
-                    high: existing.high, 
-                    low: existing.low, 
-                    errors: existing.errors, 
-                    hasData: true, // Mark as true since this date has data
-                    name: titleCaseName // Add the title-cased name
-                }
-                : { 
-                    date: date, 
-                    average: null, 
-                    high: null, 
-                    low: null, 
-                    errors: [], 
-                    hasData: false, // Mark as false since this date has no data
-                    name: titleCaseName // Add the title-cased name
-                };
+        groupedData[key] = groupedData[key].filter(d => {
+            return last30Days.some(date => (
+                date.getFullYear() === d.date.getFullYear() && 
+                date.getMonth() === d.date.getMonth() && 
+                date.getDate() === d.date.getDate()
+            ));
         });
-        groupedData[key] = filledData;
     }
 
     return groupedData;
 }
+

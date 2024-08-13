@@ -98,6 +98,7 @@ const customLegendPlugin = {
 fetchData().then(data => {
     if (data) {
         const processedData = processData(data);
+        console.log('processedData: ', processedData)
         generateChart(processedData);
     } else {
         console.error('No data to display');
@@ -156,7 +157,7 @@ function generateChart(data) {
                     type: 'time',
                     time: {
                         unit: 'day',
-                        tooltipFormat: 'MMM d, yyyy',
+                        tooltipFormat: 'MMM d, yyyy h:mm a', // Update tooltip to show time
                     },
                     title: {
                         display: true,
